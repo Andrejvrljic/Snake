@@ -1,0 +1,117 @@
+:root {
+  --bg: #0f1720;
+  --panel: #16212d;
+  --grid: #1b2836;
+  --text: #e6edf3;
+  --muted: #8b9bb0;
+  --accent: #4ade80;
+  --food: #f87171;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 16px 16px max(16px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
+.scores { display: flex; gap: 18px; }
+.scores > div { display: flex; flex-direction: column; align-items: flex-end; }
+.label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+#score, #best { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.board-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--panel);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+  touch-action: none;
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  text-align: center;
+  background: rgb(15 23 32 / 0.72);
+  backdrop-filter: blur(2px);
+}
+.overlay[hidden] { display: none; }
+.overlay-title { margin: 0; font-size: 2rem; font-weight: 800; }
+.overlay-text { margin: 0 0 10px; color: var(--muted); }
+
+button {
+  font: inherit;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+button:focus-visible { outline: 3px solid var(--text); outline-offset: 2px; }
+
+.pad {
+  display: grid;
+  grid-template-columns: repeat(3, 64px);
+  grid-template-rows: repeat(3, 56px);
+  gap: 8px;
+  justify-content: center;
+}
+.pad button {
+  padding: 0;
+  font-size: 1.3rem;
+  color: var(--text);
+  background: var(--panel);
+}
+.pad button:active { background: var(--grid); }
+.pad [data-dir="up"] { grid-column: 2; grid-row: 1; }
+.pad [data-dir="left"] { grid-column: 1; grid-row: 2; }
+.pad #pause { grid-column: 2; grid-row: 2; font-size: 0.9rem; }
+.pad [data-dir="right"] { grid-column: 3; grid-row: 2; }
+.pad [data-dir="down"] { grid-column: 2; grid-row: 3; }
+
+/* Auf Geräten mit Maus/Tastatur braucht man das Steuerkreuz nicht. */
+@media (hover: hover) and (pointer: fine) {
+  .pad { display: none; }
+}
+
+.help { margin: 0; text-align: center; font-size: 0.85rem; color: var(--muted); }

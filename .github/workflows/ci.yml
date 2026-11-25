@@ -1,0 +1,61 @@
+name: CI & Deploy
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Syntax prüfen
+        run: node --check src/game.js && node --check src/main.js
+      - name: Tests ausführen
+        run: npm test
+
+  build:
+    name: Seite bauen
+    needs: test
+    runs-on: ubuntu-latest
+    # Nur vom Standard-Branch (z. B. main) veröffentlichen, nicht von PRs oder anderen Branches.
+    if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Nur die Spieldateien einpacken
+        run: |
+          mkdir -p _site/src
+          cp index.html style.css _site/
+          cp src/*.js _site/src/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Auf GitHub Pages veröffentlichen
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

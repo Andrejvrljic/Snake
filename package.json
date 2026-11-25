@@ -1,0 +1,14 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Snake im Browser – getestet und veröffentlicht mit GitHub Actions",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "npx --yes serve@14.2.4 ."
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
