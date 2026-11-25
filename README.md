@@ -26,13 +26,13 @@ npm test         # Tests der Spiellogik (Node 20+)
 Der Workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) läuft bei jedem Push und Pull Request:
 
 1. **Tests** – Syntax-Check und `npm test` auf Node 20 und 22
-2. **Seite bauen** – packt `index.html`, `style.css` und `src/` ein (nur auf dem Standard-Branch)
+2. **Seite bauen** – packt `index.html`, `style.css` und `src/` ein (nur auf `main`)
 3. **Veröffentlichen** – deployt auf GitHub Pages
 
 ### Einmalig einrichten
 
 Im Repository unter **Settings → Pages → Build and deployment → Source** den Eintrag **„GitHub Actions“** auswählen.
-Danach ist das Spiel nach jedem Push auf den Standard-Branch unter
+Danach ist das Spiel nach jedem Push auf `main` unter
 `https://<benutzername>.github.io/<repo>/` erreichbar.
 
 ## Aufbau
